@@ -1,0 +1,55 @@
+{
+  "name": "haoyun-extension",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Local MVP resume autofill extension built with Plasmo",
+  "scripts": {
+    "dev": "plasmo dev",
+    "dev:backend": "node backend/server.mjs",
+    "build": "plasmo build",
+    "package": "plasmo package",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "mammoth": "^1.9.1",
+    "pdfjs-dist": "^4.8.69",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.0.280",
+    "@types/react": "18.3.12",
+    "@types/react-dom": "18.3.1",
+    "plasmo": "^0.90.4",
+    "typescript": "5.6.3"
+  },
+  "manifest": {
+    "name": "好运 Resume Autofill (Local MVP)",
+    "description": "Upload resume, parse with AI, and autofill job application forms.",
+    "permissions": [
+      "storage",
+      "activeTab",
+      "scripting"
+    ],
+    "host_permissions": [
+      "http://127.0.0.1/*",
+      "http://localhost/*",
+      "https://jobs.bytedance.com/*",
+      "https://careers.bytedance.com/*",
+      "https://*.zhipin.com/*",
+      "https://*.lagou.com/*",
+      "https://*.zhaopin.com/*",
+      "https://*.51job.com/*",
+      "https://*.liepin.com/*",
+      "https://*.linkedin.com/*",
+      "https://*.smartrecruiters.com/*",
+      "https://*.greenhouse.io/*",
+      "https://*.lever.co/*",
+      "https://*.workday.com/*",
+      "https://*.myworkdayjobs.com/*"
+    ]
+  }
+}
