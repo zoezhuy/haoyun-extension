@@ -4,6 +4,13 @@ AI-Powered Resume Auto-Fill Chrome Extension
 🔗 产品原型 / Product Prototype：https://haoyun.figma.site  
 🔗 前端管理平台 / Frontend Platform：https://github.com/zoezhuy/haoyun-app
 
+**Product Screenshots 产品截图**
+
+**插件弹窗 / Extension Popup**
+![Extension Popup](./assets/extension-popup.png)
+
+**安装引导页 / Installation Landing Page**
+![Landing Page](./assets/extension-landing.png)
 ---
 
 **What is this? 这是什么**
