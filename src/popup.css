@@ -115,6 +115,11 @@ body {
 .upload-icon {
   width: 22px;
   height: 22px;
+  color: #155dfc;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2;
 }
 
 .upload-title {
@@ -172,6 +177,11 @@ body {
 .detected-icon {
   width: 14px;
   height: 14px;
+  color: #4f39f6;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2;
 }
 
 .detected-title {
@@ -205,9 +215,13 @@ body {
   cursor: pointer;
 }
 
-.primary-fill img {
+.primary-fill svg {
   width: 16px;
   height: 16px;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2;
 }
 
 .primary-fill:disabled {
@@ -303,7 +317,11 @@ body {
   cursor: pointer;
 }
 
-.text-action img {
+.text-action svg {
   width: 13px;
   height: 13px;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
 }

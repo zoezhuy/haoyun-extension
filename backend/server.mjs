@@ -2,10 +2,13 @@ import cors from "cors"
 import dotenv from "dotenv"
 import express from "express"
 
+import { isRequestOriginAllowed, parseAllowedExtensionOrigins } from "./cors-policy.mjs"
+
 dotenv.config()
 
 const app = express()
 const port = Number(process.env.BACKEND_PORT || 8787)
+const allowedExtensionOrigins = parseAllowedExtensionOrigins(process.env.ALLOWED_EXTENSION_ORIGINS)
 
 const RESUME_JSON_SCHEMA = {
   name: "resume_schema_cn",
@@ -125,7 +128,23 @@ const extractStructuredData = (payload) => {
   return null
 }
 
-app.use(cors({ origin: true }))
+app.use((req, res, next) => {
+  const origin = req.get("Origin")
+  if (!isRequestOriginAllowed(origin, allowedExtensionOrigins)) {
+    res.status(403).json({ ok: false, error: "Origin is not allowed." })
+    return
+  }
+  next()
+})
+app.use(
+  cors({
+    allowedHeaders: ["Content-Type"],
+    methods: ["GET", "POST", "OPTIONS"],
+    origin(origin, callback) {
+      callback(null, isRequestOriginAllowed(origin, allowedExtensionOrigins))
+    }
+  })
+)
 app.use(express.json({ limit: "8mb" }))
 
 app.get("/health", (_req, res) => {

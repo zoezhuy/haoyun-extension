@@ -36,6 +36,7 @@ Safest local-first architecture for resume upload, AI parsing, and autofill.
 7. Local backend (`backend/server.mjs`)
 - Exposes `/parse-resume` and `/health`.
 - Reads `OPENAI_API_KEY` from environment variables only.
+- Rejects browser requests that do not come from an allowed `chrome-extension://` origin.
 - Calls OpenAI and normalizes structured schema for Chinese job application fields.
 
 ## Data Flow
@@ -67,7 +68,7 @@ flowchart LR
 | Boundary | Data crossing it | Control in the MVP |
 |---|---|---|
 | Resume file → extension | Raw file and extracted text | File selection is user initiated; extraction happens in the extension |
-| Extension → local backend | Extracted resume text | Backend listens on `127.0.0.1`; URL is explicit in settings |
+| Extension → local backend | Extracted resume text | Backend listens on `127.0.0.1`, checks the extension origin, and can be locked to exact IDs through `ALLOWED_EXTENSION_ORIGINS` |
 | Local backend → model provider | Resume text | Key stays in server environment; user must review provider data policy |
 | Structured resume → browser storage | Parsed personal data | Stored in `chrome.storage.local`; no cloud account or sync |
 | Extension → application form | Selected field values | Empty fields only; user initiates filling and retains submission control |
@@ -77,6 +78,8 @@ flowchart LR
 - No OpenAI API key in extension frontend/background code.
 - API key only exists in backend process env (`.env` on local machine).
 - Extension only talks to local backend endpoint.
+- Ordinary website origins are rejected before parsing; stable builds should configure the exact extension origin.
+- Popup icons are bundled as inline SVG and do not depend on remote design-tool URLs.
 - Autofill never clicks the final submit button.
 - Domain access does not imply verified compatibility; each site and component type requires dated regression evidence.
 - This architecture has not completed a production security, privacy, or compliance review.

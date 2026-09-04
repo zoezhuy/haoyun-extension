@@ -6,14 +6,37 @@ import type { ResumeData, ResumeRecord } from "~src/lib/types"
 
 import "./popup.css"
 
-const ASSETS = {
-  logo: "https://www.figma.com/api/mcp/asset/06ea9cdf-a99c-4e19-ba1d-efef6a33de93",
-  upload: "https://www.figma.com/api/mcp/asset/388d45ef-d6b2-4ba9-bae0-0f5b279ae2d0",
-  detected: "https://www.figma.com/api/mcp/asset/f3470267-c2b3-45df-93ff-de75717bf81d",
-  bolt: "https://www.figma.com/api/mcp/asset/0538f3df-3466-4cad-8b62-fb803f604b22",
-  settings: "https://www.figma.com/api/mcp/asset/b34698d5-267b-4600-9d7a-a2bb3cd986e0",
-  help: "https://www.figma.com/api/mcp/asset/ac699424-0858-4593-b265-0fff3dfb0682",
-  chevron: "https://www.figma.com/api/mcp/asset/95b360ec-c2fa-45dd-ab5c-ff0203e87f02"
+type IconName = "logo" | "upload" | "detected" | "bolt" | "settings" | "help" | "chevron"
+
+const Icon = ({ className, name }: { className?: string; name: IconName }) => {
+  const common = {
+    "aria-hidden": true,
+    className,
+    fill: "none",
+    focusable: "false",
+    viewBox: "0 0 24 24"
+  } as const
+
+  if (name === "logo") {
+    return (
+      <svg {...common} viewBox="0 0 36 36">
+        <rect fill="#4f39f6" height="36" rx="13" width="36" />
+        <path d="M11 19.2 15.3 23 25 12.8" stroke="#fff" strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" />
+        <path d="M11.5 12.5h5" stroke="#c7d2fe" strokeLinecap="round" strokeWidth="2" />
+      </svg>
+    )
+  }
+
+  const paths: Record<Exclude<IconName, "logo">, React.ReactNode> = {
+    upload: <><path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5" /><path d="M5 14v4a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4" /></>,
+    detected: <><circle cx="12" cy="12" r="9" /><path d="m8 12 2.5 2.5L16.5 8.5" /></>,
+    bolt: <path d="m13.5 2-8 12h6l-1 8 8-12h-6l1-8Z" />,
+    settings: <><circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-2.8 2.8-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6v.2h-4V21a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1L4.2 17l.1-.1a1.7 1.7 0 0 0 .3-1.9A1.7 1.7 0 0 0 3 14H2.8v-4H3a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9L4.2 7 7 4.2l.1.1A1.7 1.7 0 0 0 9 4.6 1.7 1.7 0 0 0 10 3V2.8h4V3a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1L19.8 7l-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.6 1h.2v4H21a1.7 1.7 0 0 0-1.6 1Z" /></>,
+    help: <><circle cx="12" cy="12" r="9" /><path d="M9.8 9a2.3 2.3 0 1 1 3.4 2c-.8.5-1.2 1-1.2 2" /><path d="M12 17h.01" /></>,
+    chevron: <path d="m9 18 6-6-6-6" />
+  }
+
+  return <svg {...common}>{paths[name]}</svg>
 }
 
 const getActiveTabId = async (): Promise<number | null> => {
@@ -218,7 +241,7 @@ function IndexPopup() {
     <main className="popup-root" data-node-id="0:306">
       <header className="popup-header" data-node-id="0:307">
         <div className="brand-block">
-          <img alt="好运 Logo" className="brand-logo" src={ASSETS.logo} />
+          <Icon className="brand-logo" name="logo" />
           <div>
             <h1 className="brand-title">好运</h1>
             <p className="brand-subtitle">求职好运从现在开始</p>
@@ -232,7 +255,7 @@ function IndexPopup() {
       <section className="popup-body">
         <div className="upload-card" data-node-id="0:320">
           <div className="upload-icon-wrap">
-            <img alt="Upload" className="upload-icon" src={ASSETS.upload} />
+            <Icon className="upload-icon" name="upload" />
           </div>
           <h2 className="upload-title">{hasResume ? "已载入简历" : "暂无简历数据"}</h2>
           <p className="upload-text">
@@ -254,7 +277,7 @@ function IndexPopup() {
 
         <div className="detected-card" data-node-id="0:334">
           <div className="detected-icon-wrap">
-            <img alt="Detected" className="detected-icon" src={ASSETS.detected} />
+            <Icon className="detected-icon" name="detected" />
           </div>
           <div>
             <p className="detected-title">已识别到申请表单</p>
@@ -263,7 +286,7 @@ function IndexPopup() {
         </div>
 
         <button className="primary-fill" disabled={!isAutofillEnabled} onClick={onAutofill} type="button">
-          <img alt="Fill" src={ASSETS.bolt} />
+          <Icon name="bolt" />
           立即开始自动填写
         </button>
         <p className="autofill-diagnostic">
@@ -291,14 +314,14 @@ function IndexPopup() {
       <footer className="popup-footer" data-node-id="0:368">
         <div className="footer-left">
           <button className="text-action" onClick={onSettings} type="button">
-            <img alt="Settings" src={ASSETS.settings} />设置
+            <Icon name="settings" />设置
           </button>
           <button className="text-action" type="button">
-            <img alt="Help" src={ASSETS.help} />帮助
+            <Icon name="help" />帮助
           </button>
         </div>
         <button className="text-action" type="button">
-          管理简历库 <img alt="Chevron" src={ASSETS.chevron} />
+          管理简历库 <Icon name="chevron" />
         </button>
       </footer>
     </main>

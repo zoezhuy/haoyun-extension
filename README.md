@@ -102,7 +102,10 @@ cp .env.example .env
 ```text
 OPENAI_API_KEY=your_key
 BACKEND_PORT=8787
+ALLOWED_EXTENSION_ORIGINS=chrome-extension://aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 ```
+
+`ALLOWED_EXTENSION_ORIGINS` 支持以逗号分隔多个扩展来源。本地加载未打包扩展时可以留空，此时后端只接受格式合法的 `chrome-extension://` 来源并拒绝普通网页；扩展 ID 固定后，建议填写精确来源。
 
 分别启动本地解析服务与扩展开发环境：
 
@@ -134,6 +137,8 @@ src/
   lib/storage.ts            # chrome.storage.local 封装
   services/ai-parser.ts     # 本地解析服务客户端
 backend/
+  cors-policy.mjs           # 本地服务的扩展来源白名单
+  cors-policy.test.mjs      # 允许/拒绝来源自动化测试
   server.mjs                # OpenAI Responses API 与 JSON Schema 解析
 tests/
   autofill-test-page.html   # 不含真实数据的合成表单测试页
@@ -145,6 +150,8 @@ tests/
 
 - 简历文本会发送给用户自行配置的模型服务进行结构化处理；使用前应核对该服务的数据处理政策；
 - API Key 不写入扩展前端，由本地后端环境变量读取；
+- 本地后端拒绝普通网页来源，并可通过环境变量限定精确扩展 ID；
+- 弹窗图标以内联 SVG 随扩展打包，不依赖远程设计资源；
 - 结构化简历保存在当前浏览器的本地扩展存储中；
 - 当前版本没有云账户、跨设备同步或生产级访问控制；
 - 自动填写结果必须由用户复核；
