@@ -1,4 +1,4 @@
-# Minimal MVP Architecture
+# Architecture & Privacy Data Flow
 
 ## Goal
 Safest local-first architecture for resume upload, AI parsing, and autofill.
@@ -47,9 +47,36 @@ Safest local-first architecture for resume upload, AI parsing, and autofill.
 5. Backend returns structured JSON response.
 6. Extension stores result in `chrome.storage.local` and renders it.
 7. User triggers autofill and content script applies mapped values.
+8. The extension stops after filling fields; the user reviews the values and manually submits the application.
+
+```mermaid
+flowchart LR
+  A[Resume file on device] -->|local text extraction| B[Extension]
+  B -->|resume text| C[Local Express service]
+  C -->|model request| D[User-configured OpenAI API]
+  D -->|schema-constrained JSON| C
+  C -->|structured resume| B
+  B -->|chrome.storage.local| E[Local browser profile]
+  E --> F[Heuristic bilingual field matcher]
+  F -->|fill empty fields only| G[Job application page]
+  G --> H[User review and manual submit]
+```
+
+## Trust boundaries
+
+| Boundary | Data crossing it | Control in the MVP |
+|---|---|---|
+| Resume file → extension | Raw file and extracted text | File selection is user initiated; extraction happens in the extension |
+| Extension → local backend | Extracted resume text | Backend listens on `127.0.0.1`; URL is explicit in settings |
+| Local backend → model provider | Resume text | Key stays in server environment; user must review provider data policy |
+| Structured resume → browser storage | Parsed personal data | Stored in `chrome.storage.local`; no cloud account or sync |
+| Extension → application form | Selected field values | Empty fields only; user initiates filling and retains submission control |
 
 ## Security constraints for this MVP
 
 - No OpenAI API key in extension frontend/background code.
 - API key only exists in backend process env (`.env` on local machine).
 - Extension only talks to local backend endpoint.
+- Autofill never clicks the final submit button.
+- Domain access does not imply verified compatibility; each site and component type requires dated regression evidence.
+- This architecture has not completed a production security, privacy, or compliance review.

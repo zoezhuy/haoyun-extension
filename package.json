@@ -1,14 +1,15 @@
 {
   "name": "haoyun-extension",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "private": true,
-  "description": "Local MVP resume autofill extension built with Plasmo",
+  "description": "LLM-based resume parsing with heuristic bilingual form-field matching and user-controlled autofill.",
   "scripts": {
     "dev": "plasmo dev",
     "dev:backend": "node backend/server.mjs",
     "build": "plasmo build",
     "package": "plasmo package",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
   },
   "dependencies": {
     "cors": "^2.8.6",
@@ -24,7 +25,8 @@
     "@types/react": "18.3.12",
     "@types/react-dom": "18.3.1",
     "plasmo": "^0.90.4",
-    "typescript": "5.6.3"
+    "typescript": "5.6.3",
+    "vitest": "^2.1.9"
   },
   "manifest": {
     "name": "好运 Resume Autofill (Local MVP)",

@@ -4,6 +4,8 @@
 
 [Web 作品集](https://zoezhuy.github.io/haoyun-app/) · [Figma 产品原型](https://haoyun.figma.site/) · [配套 Web 源码](https://github.com/zoezhuy/haoyun-app)
 
+**一句话技术定位：LLM-based resume parsing + heuristic bilingual form-field matching.**
+
 - **项目性质：** 个人作品集 / 本地 MVP
 - **个人职责：** 问题定义、产品流程、Figma 原型、扩展架构、前后端实现与文档
 - **核心技术：** Plasmo、Chrome Extension MV3、React、TypeScript、Express、OpenAI Responses API
@@ -71,6 +73,19 @@ LLM 适合把格式不统一的简历文本转换为统一数据结构；网页�
 
 ![Installation Landing Page](./assets/extension-landing.png)
 
+## 平台兼容性记录
+
+扩展清单中的域名权限只表示内容脚本可以在这些页面运行，不代表已经对每个平台的当前版本完成稳定兼容验证。
+
+| 平台 / 测试环境 | 测试日期 | 文本框 | 原生下拉框 | 日期 / 自定义组件 | 已知问题 |
+|---|---|---:|---:|---:|---|
+| [仓库内合成测试页](./tests/autofill-test-page.html) | 2026-09-03 | 已验证 | 已验证 | 部分支持 | 不覆盖站点自定义组件和动态多步骤表单 |
+| LinkedIn | 尚未形成可公开记录 | 待验证 | 待验证 | 待验证 | DOM 与流程会变化，不作稳定兼容承诺 |
+| 智联招聘 | 尚未形成可公开记录 | 待验证 | 待验证 | 待验证 | 需要真实页面回归记录 |
+| BOSS 直聘 | 尚未形成可公开记录 | 待验证 | 待验证 | 待验证 | 需要真实页面回归记录 |
+
+字段别名的自动化用例位于 [`src/lib/field-matching.test.ts`](./src/lib/field-matching.test.ts)，测试中文/英文姓名、邮箱、电话、学校、专业、学历、毕业年份、职位、城市和作品集等映射，同时检查未知字段与公司名称不会被错误填写。
+
 ## 本地运行
 
 环境要求：Node.js 20+。
@@ -101,6 +116,7 @@ npm run dev
 验证命令：
 
 ```bash
+npm test
 npm run typecheck
 npm run build
 ```
@@ -113,11 +129,17 @@ src/
   background.ts             # 扩展后台逻辑
   contents/autofill.ts      # 页面字段识别与填写
   lib/resume-extract.ts     # PDF / DOCX / TXT 文本提取
+  lib/field-matching.ts     # 可独立测试的中英文字段映射规则
+  lib/field-matching.test.ts# 字段识别自动化测试
   lib/storage.ts            # chrome.storage.local 封装
   services/ai-parser.ts     # 本地解析服务客户端
 backend/
   server.mjs                # OpenAI Responses API 与 JSON Schema 解析
+tests/
+  autofill-test-page.html   # 不含真实数据的合成表单测试页
 ```
+
+更完整的数据流、信任边界和威胁控制见 [Architecture & Privacy Data Flow](./ARCHITECTURE.md)。
 
 ## 隐私与安全边界
 
@@ -136,6 +158,14 @@ backend/
 4. 增加填写前预览、字段级确认、撤销与错误诊断；
 5. 增加字段映射和解析结果的自动化测试；
 6. 完成隐私、安全和兼容性验证后再准备商店发布。
+
+## Release
+
+当前作品集基线版本为 `v0.1.0`：包含本地简历解析服务、浏览器本地存储、启发式中英文字段匹配、合成测试页和字段匹配自动化测试。该版本仍是开发者模式加载的本地 MVP，不是 Chrome Web Store 正式产品。
+
+## License
+
+[MIT](./LICENSE)
 
 ## Contact
 
