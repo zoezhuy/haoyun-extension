@@ -30,7 +30,7 @@
   },
   "manifest": {
     "name": "好运 Resume Autofill (Local MVP)",
-    "description": "Upload resume, parse with AI, and autofill job application forms.",
+    "description": "Parse resumes with an LLM and autofill forms using heuristic bilingual field matching.",
     "permissions": [
       "storage",
       "activeTab",
